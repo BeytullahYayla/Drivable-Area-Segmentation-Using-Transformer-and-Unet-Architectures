@@ -1,0 +1,7 @@
+venv/
+*.pyc
+predict.py
+data/jsons
+data/images
+data/masks
+data/masked_images
