@@ -19,6 +19,9 @@ Here are some popular supervised learning algorithms:
 - Decision Trees and Random Forests
 - Neural Networks
 
+  ![image](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/1b2366e7-e9df-445b-9bf8-5f8fd3e2e938)
+
+
 ### Unsupervised Learning
 
 In unsupervised learning, we do not have labeled data. The system tries to learn specific patterns in the data without a teacher.
@@ -39,3 +42,13 @@ Here are some commonly used unsupervised machine learning algorithms:
 - Kernel PCA
 - Locally-Linear Embedding (LLE)
 - t-distributed Stochastic Neighbor Embedding (t-SNE)
+
+![Image 1](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/9609775c-3068-441d-bc42-507a4e8314f5)
+
+<b>Dimension Reduction</b>
+
+![Image 2](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/81ea613b-3729-4c0a-bbf3-a605111992b0)
+
+<b>Principal Component Analysis</b>
+
+
