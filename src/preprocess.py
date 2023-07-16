@@ -183,10 +183,13 @@ def torchlike_data(data):
     n_channels = data.shape[2]
 
     # Create and empty image whose dimension is similar to input
-    torchlike_data_output = np.empty((...))
+    torchlike_data_output = np.empty((n_channels,data.shape[0],data.shape[1]))
 
     # For each channel
-    ...
+    for i in range(n_channels):
+        torchlike_data_output[i]=data[:,:,i]
+
+        
 
     return torchlike_data_output
 
@@ -223,8 +226,8 @@ def one_hot_encoder(data, n_class):
     encoded_labels = [[0,1], [1,0]]
 
     #
-    for lbl in range(n_class):
-        ...
+    for i,unique_value in enumerate(np.unique(data)):
+        encoded_data[:,:,i][data==unique_value]==1
 
 
 
