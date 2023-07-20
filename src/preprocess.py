@@ -56,6 +56,9 @@ def tensorize_image(image_path_list, output_shape, cuda=False):
         # Resize the image according to defined shape
         image = cv2.resize(image, output_shape)
 
+        # Normalize image
+        image=image//255
+
         # Change input structure according to pytorch input structure
         torchlike_image = torchlike_data(image)
 
@@ -225,14 +228,16 @@ def one_hot_encoder(data, n_class):
     # Define labels
     encoded_labels = [[0,1], [1,0]]
 
-    #
-    for i,unique_value in enumerate(np.unique(data)):
-        encoded_data[:,:,i][data==unique_value]==1
+    """"
+   ...... complete here
+    """
+    for i,unique_val in enumerate(np.unique(data)):
+        encoded_data[data==unique_val]=encoded_labels[i]
 
 
 
     return encoded_data
-############################ TODO END ################################
+
 
 
 

@@ -20,11 +20,14 @@ for mask_name in tqdm.tqdm(mask_list):
 
     # Access required folders
     mask_path      = os.path.join(MASK_DIR, mask_name)
-    image_path     = os.path.join(IMAGE_DIR, mask_name_without_ex+'.jpg')
+    image_path     = os.path.join(IMAGE_DIR, mask_name_without_ex+'.png')
     image_out_path = os.path.join(IMAGE_OUT_DIR, mask_name)
 
     # Read mask and corresponding original image
     mask  = cv2.imread(mask_path, 0).astype(np.uint8)
+    print(mask)
+    print(mask_path)
+    print(image_path)
     image = cv2.imread(image_path).astype(np.uint8)
 
     # Change the color of the pixels on the original image that corresponds

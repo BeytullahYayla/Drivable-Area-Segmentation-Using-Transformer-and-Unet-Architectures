@@ -1,12 +1,13 @@
 import os
 
 # Path to jsons
-JSON_DIR = '../data/jsons'
+JSON_DIR = 'C:\\Users\\Beytullah\\Documents\\GitHub\\FordOtosan-L4Highway-Internship-Project\\data\\jsons'
 
 # Path to mask
+LINE_MASK_DIR  = '../data/line_masks'
 MASK_DIR  = '../data/masks'
-if not os.path.exists(MASK_DIR):
-    os.mkdir(MASK_DIR)
+if not os.path.exists(LINE_MASK_DIR):
+    os.mkdir(LINE_MASK_DIR)
 
 # Path to output images
 IMAGE_OUT_DIR = '../data/masked_images'
