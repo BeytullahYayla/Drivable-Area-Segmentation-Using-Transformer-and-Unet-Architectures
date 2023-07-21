@@ -3,10 +3,8 @@
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
 - [Topics](#-pages)
-  * [What's Machine Learning](docs/machine_learning.md)
-  * [Supervised Learning And Unsupervised Learning](docs/supervised_unsupervised_learning.md)
-  * [What's Deep Learning](docs/deep_learning.md)
-  * [What's the Neural Network](docs/neural_network.md)
+  * [General Overview to Project Topics](https://sway.office.com/Xl8poG97cVtRlonZ?ref=Link)
+ 
 
 
 
