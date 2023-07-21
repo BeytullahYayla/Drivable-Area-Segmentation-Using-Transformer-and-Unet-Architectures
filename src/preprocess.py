@@ -56,8 +56,8 @@ def tensorize_image(image_path_list, output_shape, cuda=False):
         # Resize the image according to defined shape
         image = cv2.resize(image, output_shape)
 
-        # Normalize image
-        image=image//255
+        # # Normalize image
+        # image=image//255
 
         # Change input structure according to pytorch input structure
         torchlike_image = torchlike_data(image)
