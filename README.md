@@ -1,9 +1,13 @@
 # FordOtosan-L4Highway-Internship-Project
 ## 🚩 Contents
 - [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
 - [Topics](#-pages)
   * [General Overview to Project Topics](https://sway.office.com/GWVpEgbbvFCstcKv?ref=Link)
+- [Getting Started](#-getting-started)
+  *  [Json2Mask](#-json2mask)
+  *  [Mask On Image](#-mask-on-image)
+  *  [Preprocessing](#-preprocessing)
+
  
 ## 🗃 Project Structure
 ```
