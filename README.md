@@ -37,3 +37,7 @@ Ford Otosan Level 4 Higway Autonomus Vehicle Freespace Segmentation Project
     └─ masks
          └─ cfcu_002387.png
 ```
+
+## Getting Started
+### The purpose of the project
+In this project my aim is to detect drivable areas in highways using state of the art deep learning techniques and present a repository to autonomous vehicle engineers.
