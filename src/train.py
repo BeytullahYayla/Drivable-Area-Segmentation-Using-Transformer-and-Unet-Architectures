@@ -1,4 +1,4 @@
-from model import FoInternNet
+from model import Unet
 from preprocess import tensorize_image, tensorize_mask, image_mask_check
 import os
 import glob
@@ -58,7 +58,7 @@ train_label_path_list = mask_path_list[valid_ind:]
 steps_per_epoch = len(train_input_path_list)//batch_size
 
 # CALL MODEL
-model = FoInternNet(input_size=input_shape, n_classes=2)
+model=Unet(in_channels=3,out_channels=n_classes)
 
 # DEFINE LOSS FUNCTION AND OPTIMIZER
 criterion = nn.BCELoss()

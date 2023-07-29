@@ -155,8 +155,8 @@ def image_mask_check(image_path_list, mask_path_list):
 
     # Check each file names
     for image_path, mask_path in zip(image_path_list, mask_path_list):
-        image_name = image_path.split('/')[-1].split('.')[0]
-        mask_name  = mask_path.split('/')[-1].split('.')[0]
+        image_name = image_path.split('\\')[-1].split('.')[0]
+        mask_name  = mask_path.split('\\')[-1].split('.')[0]
         if image_name != mask_name:
             print("Image and mask name does not match {} - {}".format(image_name, mask_name)+"\nImages and masks folder should have same file names." )
             return False
@@ -226,7 +226,16 @@ def one_hot_encoder(data, n_class):
     encoded_data = np.zeros((*data.shape, n_class), dtype=np.int)
 
     # Define labels
-    encoded_labels = [[0,1], [1,0]]
+    if n_class==2:
+        encoded_labels = [[0,1], [1,0]]
+    if n_class==3:
+        encoded_labels=encoded_labels = [
+        [1, 0, 0],  # No line
+        [0, 1, 0],  # Solid Line
+        [0, 0, 1],  # Dashed Line
+    ]
+
+    
 
     """"
    ...... complete here
