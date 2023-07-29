@@ -5,9 +5,6 @@
 - [Topics](#-pages)
   * [General Overview to Project Topics](https://sway.office.com/GWVpEgbbvFCstcKv?ref=Link)
  
-
-
-
 ## 🗃 Project Structure
 ```
 Ford Otosan Level 4 Higway Autonomus Vehicle Freespace Segmentation Project
@@ -38,5 +35,5 @@ Ford Otosan Level 4 Higway Autonomus Vehicle Freespace Segmentation Project
     └─ masked_images
     |    ├─ cfcu_002387.png
     └─ masks
-        └─ cfcu_002387.png
+         └─ cfcu_002387.png
 ```
