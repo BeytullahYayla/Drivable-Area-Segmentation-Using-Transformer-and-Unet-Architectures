@@ -89,4 +89,6 @@ This script file enables us to create masks using provided json files. Every jso
 ```
 Let we dive into deeper about this json file. The important features of this json are <b>classTitle</b>(to determine which object properties we are seeing or basically the class name of the object), <b>points,exterior</b>(We're gonna create mask by this specific points). <b>Exterior</b> refers to list of coordinates of the points that make up the outer edge of the polygon. You can take a look example mask that i obtained in jupyter notebook using json2 mask script.![Json2Mask](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/664a03e3-254c-49f9-acb9-5cda517f6340)
 ![Json2MaskLine](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e40e3008-0bd5-4b39-9404-4fcde68e24ba)
+![image](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/fe876bac-78bb-4e74-81b6-6e346df6e04d)
+
 
