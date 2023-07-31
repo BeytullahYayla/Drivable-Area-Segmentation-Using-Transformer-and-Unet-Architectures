@@ -5,8 +5,8 @@
   * [General Overview to Project Topics](https://sway.office.com/GWVpEgbbvFCstcKv?ref=Link)
 - [Getting Started](#Getting-Started)
   *  [Json2Mask](#json2mask)
-  *  [Mask On Image](#-mask-on-image)
-  *  [Preprocessing](#-preprocessing)
+  *  [Mask On Image](#mask-on-image)
+  *  [Preprocessing](#preprocessing)
 
  
 ## 🗃 Project Structure
