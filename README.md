@@ -4,7 +4,7 @@
 - [Topics](#-pages)
   * [General Overview to Project Topics](https://sway.office.com/GWVpEgbbvFCstcKv?ref=Link)
 - [Getting Started](#Getting-Started)
-  *  [Json2Mask](#Json2Mask)
+  *  [Json2Mask](#json2mask)
   *  [Mask On Image](#-mask-on-image)
   *  [Preprocessing](#-preprocessing)
 
