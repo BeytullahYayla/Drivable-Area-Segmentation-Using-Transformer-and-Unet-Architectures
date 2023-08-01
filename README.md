@@ -7,6 +7,10 @@
   *  [Json2Mask](#json2mask)
   *  [Mask On Image](#mask-on-image)
   *  [Preprocessing](#preprocessing)
+      *   [torchlike_data](#torchlike_data-method)
+      *   [one_hot_encoder](#one_hot_encoder-method)
+      *   [tensorize_image](#tensorize_image-method)
+      *   [tensorize_mask](#tensorize_mask-method)
 
  
 # 🗃 Project Structure
