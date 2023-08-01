@@ -264,8 +264,8 @@ The logic of method is as follows:<br>
 ### tensorize_image() method
 This method combines of our above preprocessing methods and returns final tensor output to give our segmentation model.
 ```
-def tensorize_image(image_path_list, output_shape, cuda=False):
-"""
+def tensorize_image(image_path_list, output_shape, cuda=False)
+
     # Create empty list
     local_image_list = []
 
@@ -296,8 +296,8 @@ def tensorize_image(image_path_list, output_shape, cuda=False):
         torch_image = torch_image.cuda()
 
     return torch_image
-
 ```
+
 The logic of method is as follows:<br>
 <ol>
  <li>
