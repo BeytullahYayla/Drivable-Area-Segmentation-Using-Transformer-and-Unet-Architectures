@@ -1,5 +1,5 @@
 # FordOtosan-L4Highway-Internship-Project
-## 🚩 Contents
+# 🚩 Contents
 - [Project Structure](#-project-structure)
 - [Topics](#-pages)
   * [General Overview to Project Topics](https://sway.office.com/GWVpEgbbvFCstcKv?ref=Link)
@@ -9,7 +9,7 @@
   *  [Preprocessing](#preprocessing)
 
  
-## 🗃 Project Structure
+# 🗃 Project Structure
 ```
 Ford Otosan Level 4 Higway Autonomus Vehicle Freespace Segmentation Project
 
@@ -42,11 +42,11 @@ Ford Otosan Level 4 Higway Autonomus Vehicle Freespace Segmentation Project
          └─ cfcu_002387.png
 ```
 
-## Getting Started
-### The purpose of the project
+# Getting Started
+## The purpose of the project
 In this project my aim is to detect drivable areas in highways using state of the art deep learning techniques and present a repository to autonomous vehicle engineers.
 
-### Json2Mask
+## Json2Mask
 This script file enables us to create masks using provided json files. Every json file has similar structre as follows.
 ```
         {
@@ -133,7 +133,7 @@ From top to bottom we basically get the name eof every json file in json_list an
 ![Json2MaskLine](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e40e3008-0bd5-4b39-9404-4fcde68e24ba)
 
 
-### Mask on Image
+## Mask on Image
 ```
 # For every mask image
 for mask_name in tqdm.tqdm(mask_list):
@@ -161,4 +161,110 @@ for mask_name in tqdm.tqdm(mask_list):
 First, in every mask in mask_list we obtain mask_name and for every mask name we remove it's extensions and create mask_path, image_path, image_out_path which corresponds where to save result images. After that we read mask as grayscale format and images. Then change the color of pixels on the original image that corresponds to the mask part and create new image. Finally we write output image into <b>IMAGE_OUT_DIR</b> folder.
 
 ![image](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/fe876bac-78bb-4e74-81b6-6e346df6e04d)
+
+## Preprocessing
+In image classification and segmentation task we generally use preprocessing techniques. Preprocessing techniques refer to a set of data preparation steps that are applied to raw data before it can be used for analysis or modeling. Preprocessing aims to clean, organize and transform data so that it becomes suitable for further processing. In our project we have preprocess script. This script provides us to tensorize, resize and encode input data to give segmentation model properly. I'm gonna introduce you to methods one by one.
+
+### torchlike_data() method
+This function is intended to convert the given input array data into a structure similar to a PyTorch tensor. The input array has a shape of "HxWxC", where H represents the height, W denotes the width, and C represents the number of channels. For example, in the case of a color image, C=3 for the RGB channels.
+The converted output data will have the shape "CxHxW", where each channel will be a separate layer or matrix. This means that each channel will be treated as an individual 2D matrix containing data corresponding to the original input array's respective channel.
+
+```
+ def torchlike_data(data):
+
+
+    # Obtain channel value of the input
+    n_channels = data.shape[2]
+
+    # Create and empty image whose dimension is similar to input
+    torchlike_data_output = np.empty((n_channels,data.shape[0],data.shape[1]))
+
+    # For each channel
+    for i in range(n_channels):
+        torchlike_data_output[i]=data[:,:,i]
+
+        
+
+    return torchlike_data_output
+```
+The logic of method is as follows:<br>
+<ol>
+ <li>
+ The number of channels n_channels is obtained from the third dimension (channels) of the input array.
+  
+ </li>
+ <li>
+ An empty output array torchlike_data_output is created. It will have dimensions C (number of channels), H (height), and W (width) to store each channel's data as a separate matrix.
+
+  
+ </li>
+ <li>
+  The function uses a for loop to iterate over each channel.
+ </li>
+ <li>
+  The data for each channel is copied into the torchlike_data_output array by assigning the corresponding channel data from the data array (data[:,:,i]).
+
+ </li>
+ <li>
+  As a result, the data for each channel will be stored as a separate matrix within the torchlike_data_output array. This data organization mimics the structure of PyTorch tensors.
+
+ </li>
+</ol>
+
+### one_hot_encoder() method
+Encoding categorical data is a crucial part of most of the data science projects. In this approach, each category is represented as a binary vector with a length equal to the number of unique categories. The vector has a value of 1 in the position corresponding to the category and 0 in all other positions. One-hot encoding is preferred when there is no natural order between categories, and it avoids introducing any ordinal relationship between them.
+```
+def one_hot_encoder(data, n_class):
+
+    if len(data.shape) != 2:
+        print("It should be same with the layer dimension, in this case it is 2")
+        return
+    if len(np.unique(data)) != n_class:
+        print("The number of unique values ​​in 'data' must be equal to the n_class")
+        return
+
+    # Define array whose dimensison is (width, height, number_of_class)
+    encoded_data = np.zeros((*data.shape, n_class), dtype=np.int)
+
+    # Define labels
+    if n_class==2:
+        encoded_labels = [[0,1], [1,0]]#Freespace or not
+    if n_class==3:
+        encoded_labels=encoded_labels = [
+        [1, 0, 0],  # No line
+        [0, 1, 0],  # Solid Line
+        [0, 0, 1],  # Dashed Line
+    ]
+
+    
+    for i,unique_val in enumerate(np.unique(data)):
+        encoded_data[data==unique_val]=encoded_labels[i]
+
+
+
+    return encoded_data
+```
+The logic of method is as follows:<br>
+<ol>
+ <li>
+ First we check shape of input data. It's shape must be equal to two and number of unique pixels must be equal to number of classes. Otherwise method returns nothing and finished to execution.
+ </li>
+ <li>
+ Secondly, an empty output array encoded_data is created. It will have same dimensions with data. As a third channel we give number of classes.
+ </li>
+ <li>
+  The function uses a for loop to iterate over each channel.
+ </li>
+ <li>
+  The data for each channel is copied into the torchlike_data_output array by assigning the corresponding channel data from the data array (data[:,:,i]).
+
+ </li>
+ <li>
+  As a result, the data for each channel will be stored as a separate matrix within the torchlike_data_output array. This data organization mimics the structure of PyTorch tensors.
+
+ </li>
+</ol>
+
+
+
 
