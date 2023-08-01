@@ -253,18 +253,62 @@ The logic of method is as follows:<br>
  Secondly, an empty output array encoded_data is created. It will have same dimensions with data. As a third channel we give number of classes.
  </li>
  <li>
-  The function uses a for loop to iterate over each channel.
+  We create encoded_labels vector by number of classes we have.
  </li>
  <li>
-  The data for each channel is copied into the torchlike_data_output array by assigning the corresponding channel data from the data array (data[:,:,i]).
-
+  In for loop assigns to each element in the data array whose value is unique_val, the value at the corresponding index in another array called encoded_labels. That is, the encoded_labels array represents the encoded version of the data array.
  </li>
- <li>
-  As a result, the data for each channel will be stored as a separate matrix within the torchlike_data_output array. This data organization mimics the structure of PyTorch tensors.
 
- </li>
 </ol>
+### tensorize_image() method
+This method combines of our above preprocessing methods and returns final tensor output to give our segmentation model.
+```
+def tensorize_image(image_path_list, output_shape, cuda=False):
+
+    """
+    # Create empty list
+    local_image_list = []
+
+    # For each image
+    for image_path in image_path_list:
+
+        # Access and read image
+        image = cv2.imread(image_path)
+
+        # Resize the image according to defined shape
+        image = cv2.resize(image, output_shape)
+
+        # # Normalize image
+        # image=image//255
+
+        # Change input structure according to pytorch input structure
+        torchlike_image = torchlike_data(image)
+
+        # Add into the list
+        local_image_list.append(torchlike_image)
+
+    # Convert from list structure to torch tensor
+    image_array = np.array(local_image_list, dtype=np.float32)
+    torch_image = torch.from_numpy(image_array).float()
+
+    # If multiprocessing is chosen
+    if cuda:
+        torch_image = torch_image.cuda()
+
+    return torch_image
+
+```
+The logic of method is as follows:<br>
+<ol>
+ <li>
+ First we create an empty list that keeps our image paths. 
+ </li>
+ <li>
+ After that with for loop we read images, resize, normalize it  and transpoze channel placements with torchlike_data method
+ </li>
+<li>Finally we convert local_image_list into tensor from list data type and return it</li>
 
 
+</ol>
 
 
