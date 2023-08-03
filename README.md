@@ -315,4 +315,57 @@ The logic of method is as follows:<br>
 
 </ol>
 
+### tensorize_mask() method
+
+This method combines of our above preprocessing methods and returns final tensor output to give our segmentation model. In addition to tensorize_image method we encode our mask by calling one_hot_encoding method.
+
+```
+def tensorize_mask(mask_path_list, output_shape, n_class, cuda=False):
+    
+    # Create empty list
+    local_mask_list = []
+
+    # For each masks
+    for mask_path in mask_path_list:
+
+        # Access and read mask
+        mask = cv2.imread(mask_path, 0)
+
+        # Resize the image according to defined shape
+        mask = cv2.resize(mask, output_shape)
+
+        # Apply One-Hot Encoding to image
+        mask = one_hot_encoder(mask, n_class)
+
+        # Change input structure according to pytorch input structure
+        torchlike_mask = torchlike_data(mask)
+
+
+        local_mask_list.append(torchlike_mask)
+
+    mask_array = np.array(local_mask_list, dtype=np.int)
+    torch_mask = torch.from_numpy(mask_array).float()
+    if cuda:
+        torch_mask = torch_mask.cuda()
+
+    return torch_mask
+
+```
+
+The logic of method is as follows:<br>
+<ol>
+ <li>
+ First we create an empty list that keeps our mask paths. 
+ </li>
+ <li>
+ After that with for loop we read , resize, normalize, encode it  and transpoze channel placements with torchlike_data method
+ </li>
+<li>Finally we convert local_mask_list into tensor from list data type and return it</li>
+
+
+</ol>
+
+
+
+
 
