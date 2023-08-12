@@ -49,6 +49,7 @@ def tensorize_image(image_path_list, output_shape, cuda=False):
 
     # For each image
     for image_path in image_path_list:
+        print(image_path)
 
         # Access and read image
         image = cv2.imread(image_path)
@@ -57,7 +58,7 @@ def tensorize_image(image_path_list, output_shape, cuda=False):
         image = cv2.resize(image, output_shape)
 
         # # Normalize image
-        # image=image//255
+        image=image//255
 
         # Change input structure according to pytorch input structure
         torchlike_image = torchlike_data(image)
@@ -103,7 +104,7 @@ def tensorize_mask(mask_path_list, output_shape, n_class, cuda=False):
 
     # For each masks
     for mask_path in mask_path_list:
-
+        print(f"mask path:{mask_path}")
         # Access and read mask
         mask = cv2.imread(mask_path, 0)
 
@@ -149,9 +150,9 @@ def image_mask_check(image_path_list, mask_path_list):
     """
 
     # Check list lengths
-    if len(image_path_list) != len(mask_path_list):
-        print("There are missing files ! Images and masks folder should have same number of files.")
-        return False
+    # if len(image_path_list) != len(mask_path_list):
+    #     print("There are missing files ! Images and masks folder should have same number of files.")
+    #     return False
 
     # Check each file names
     for image_path, mask_path in zip(image_path_list, mask_path_list):
@@ -237,9 +238,7 @@ def one_hot_encoder(data, n_class):
 
     
 
-    """"
-   ...... complete here
-    """
+
     for i,unique_val in enumerate(np.unique(data)):
         encoded_data[data==unique_val]=encoded_labels[i]
 

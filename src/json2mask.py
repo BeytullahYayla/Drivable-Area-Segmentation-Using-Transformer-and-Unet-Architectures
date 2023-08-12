@@ -41,6 +41,9 @@ for json_name in tqdm.tqdm(json_list):
             # Extract exterior points which is a point list that contains
             # every edge of polygon and fill the mask with the array.
             mask = cv2.fillPoly(mask, np.array([obj['points']['exterior']]), color=1)
+        # if obj['classTitle']=='Traffic Cone':
+
+        #     mask=cv2.fillPoly(mask,np.array([obj['points']['exterior']]),color=2)
 
     # Write mask image into MASK_DIR folder
     cv2.imwrite(mask_path, mask.astype(np.uint8))

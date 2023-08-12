@@ -1,25 +1,25 @@
 import os
 
 # Path to jsons
-JSON_DIR = 'C:\\Users\\Beytullah\\Documents\\GitHub\\FordOtosan-L4Highway-Internship-Project\\data\\jsons'
+JSON_DIR = 'C:\\Users\\Beytullah\\Desktop\\Ford Otosan Staj Verileri\\ann'
 
 # Path to mask
-LINE_MASK_DIR  = '../data/line_masks'
-MASK_DIR  = '../data/masks'
+LINE_MASK_DIR  = 'C:\\Users\\Beytullah\\Desktop\\Ford Otosan Staj Verileri\\line_masks'
+MASK_DIR  = 'C:\\Users\\Beytullah\\Desktop\\Ford Otosan Staj Verileri\\masks'
 if not os.path.exists(LINE_MASK_DIR):
     os.mkdir(LINE_MASK_DIR)
 
 # Path to output images
-IMAGE_OUT_DIR = '../data/masked_images'
+IMAGE_OUT_DIR = 'C:\\Users\\Beytullah\\Desktop\\Ford Otosan Staj Verileri\\masked_images'
 if not os.path.exists(IMAGE_OUT_DIR):
     os.mkdir(IMAGE_OUT_DIR)
 
 # Path to original images
-IMAGE_DIR = '../data/images'
+IMAGE_DIR = 'C:\\Users\\Beytullah\\Desktop\\Ford Otosan Staj Verileri\\img_out'
 
 
 # In order to visualize masked-image(s), change "False" with "True"
-VISUALIZE = True
+VISUALIZE = False
 
 # Bacth size
 BACTH_SIZE = 4
