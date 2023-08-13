@@ -49,7 +49,7 @@ def tensorize_image(image_path_list, output_shape, cuda=False):
 
     # For each image
     for image_path in image_path_list:
-        print(image_path)
+
 
         # Access and read image
         image = cv2.imread(image_path)
@@ -104,7 +104,7 @@ def tensorize_mask(mask_path_list, output_shape, n_class, cuda=False):
 
     # For each masks
     for mask_path in mask_path_list:
-        print(f"mask path:{mask_path}")
+       
         # Access and read mask
         mask = cv2.imread(mask_path, 0)
 
