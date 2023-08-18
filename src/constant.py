@@ -30,3 +30,12 @@ WIDTH = 224
 
 # Number of class, for this task it is 2: Non-drivable area and Driviable area
 N_CLASS= 2
+
+BACKGROUND=(0,0,0)
+FREESPACE=(255,255,255)
+RGB={
+    
+    0:BACKGROUND,
+    1:FREESPACE
+    
+}
