@@ -11,6 +11,16 @@
       *   [one_hot_encoder](#one_hot_encoder-method)
       *   [tensorize_image](#tensorize_image-method)
       *   [tensorize_mask](#tensorize_mask-method)
+ - [Training](#training)
+      *   [Splitting Data](#splitting_data)
+      *   [Optimizer](#optimizer)
+      *   [Loss Function](#loss-function)
+      *   [Segmentation Model Selection](#segmentation-model-selection)
+      *   [Training Loop](#training_loop)
+  - [Evaluation](#evaluation)
+  - [Inference](#inference)
+    
+  
 
  
 # 🗃 Project Structure
