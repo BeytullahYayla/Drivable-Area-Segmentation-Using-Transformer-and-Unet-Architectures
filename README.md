@@ -375,6 +375,16 @@ The logic of method is as follows:<br>
 
 </ol>
 
+## Training
+In this part we will train our model with our images and corresponding masks which we created by the help of json2mask script.
+### Train-Validation-Test Split
+Splitting data is crucial part of any data science related projects. We split our data into three group. Training, Validation and Test data.<br> <br>
+Training Data:<b>Training data</b> is used for train our model to learn specific patterns and adjusts it's parameters to understand the relationships between input data and corresponding outputs. The important topic about the training data is it shouldn't be used for evaluating model's performance.
+<br>
+Validation Data:During model training we use the <b>validation data</b> to asses it's performance and fine-tune hyperparameters. By evaluating our model on the validation data at every end of epoch we can prevent overfitting and gauge generalization problems.
+<br>
+Test Data:The test data is used to evaluate your model's performance in a real-world scenario. This data should not have been used during training or validation. A model's good performance on test data demonstrates its ability to generalize beyond the seen examples.
+When i do quick search from the internet i found that generally 80:10:10 or 70:20:10 rate for bigger datasets (Training,Validation, Test) is used to train and evaluate machine learning models. When we look at the dataset we have, it consists of 4660 image which is not very small. So i decided to use 70:20:10 rate for evaluate my model's performance better.
 
 
 
