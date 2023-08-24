@@ -528,6 +528,8 @@ Due to hardware constraints i used pretrained segformer model. Which is "nvidia/
 ### Inference
 
 At the end of the training and evaluation operations lets we do some predictions. 
-![indir](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/f1db5366-c6fd-4cc2-a917-1dfa6cbf25d0)
+
+![ford_predictions](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/87e4676f-aee9-4128-bd81-90eb573c1ccd)
+
 
 
