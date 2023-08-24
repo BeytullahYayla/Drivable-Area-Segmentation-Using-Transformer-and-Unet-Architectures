@@ -442,14 +442,16 @@ In the context of machine learning and neural networks, refers to an algorithm o
    <li>epsilon: Is a very small number to prevent any division by zero in the implementation (e.g. 10E-8).</li>
   </ul>
 Compared to other optimizer algorithms in mnist dataset results as follows. 
+  
 ![adam](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/9269b01b-96ca-4110-bdea-19361d0b874a)
+
 As we can see adam optimizer way better than other algorithms in terms of training cost.
 
 
 
  </li>
  <li>
-  RMSProp:
+  RMSProp: Similar to Adam, RMSprop also adapts the learning rate for each parameter. It divides the gradient by a moving average of the squared gradient, which helps in normalizing the gradient updates.
  </li>
  <li>Adagrad(Adaptive Gradient Algorithm):</li>
 </ul>
