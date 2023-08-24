@@ -423,6 +423,33 @@ N_CLASSES = 2
 
 ```
 
+### Optimizer
+
+In the context of machine learning and neural networks, refers to an algorithm or method used to adjust the parameters of a model in order to minimize the error or loss function. The goal of optimization is to find the optimal set of parameters that allow the model to best fit the training data and make accurate predictions on new, unseen data. Here are the examples of optimizer:
+
+<ul>
+ <li>
+  Stochastic Gradient Descent:This is a basic optimization algorithm that updates the parameters in the opposite direction of the gradient of the loss function. It uses a small random subset (mini-batch) of the training data for each iteration to compute the gradient.
+ </li>
+ <li>
+  Adam(Adaptive Moment Estimation):Adam combines the ideas of momentum and adaptive learning rates. It maintains exponential moving averages of past gradients and squared gradients to adjust the learning rate for each parameter individually. This helps the optimizer to adapt to different features and learning rates. Adam is  a popular algorithm because it achieves good results fast. Some of the hyperparameters of adam optimizer as follows:
+  <ul>
+   <li>
+    alpha: Also referred to as the learning rate or step size. The proportion that weights are updated (e.g. 0.001). Larger values (e.g. 0.3) results in faster initial learning before the rate is updated. Smaller values (e.g. 1.0E-5) slow learning right down during training
+   </li>
+   <li>beta1: The exponential decay rate for the first moment estimates (e.g. 0.9).</li>
+   <li>beta2: The exponential decay rate for the second-moment estimates (e.g. 0.999). This value should be set close to 1.0 on problems with a sparse gradient (e.g. NLP and computer vision problems).</li>
+   <li>epsilon: Is a very small number to prevent any division by zero in the implementation (e.g. 10E-8).</li>
+  </ul>
+Compared to other optimizer algorithms in mnist dataset results as follows. 
+![adam](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/9269b01b-96ca-4110-bdea-19361d0b874a)
+As we can see adam optimizer way better than other algorithms in terms of training cost.
 
 
 
+ </li>
+ <li>
+  RMSProp:
+ </li>
+ <li>Adagrad(Adaptive Gradient Algorithm):</li>
+</ul>
