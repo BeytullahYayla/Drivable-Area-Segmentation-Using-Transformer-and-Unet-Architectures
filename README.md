@@ -453,5 +453,81 @@ As we can see adam optimizer way better than other algorithms in terms of traini
  <li>
   RMSProp: Similar to Adam, RMSprop also adapts the learning rate for each parameter. It divides the gradient by a moving average of the squared gradient, which helps in normalizing the gradient updates.
  </li>
- <li>Adagrad(Adaptive Gradient Algorithm):</li>
+ <li>Adagrad(Adaptive Gradient Algorithm):Adagrad (Adaptive Gradient Algorithm): Adagrad adapts the learning rate of each parameter based on the historical gradient information. It allocates larger updates to parameters with smaller historical gradients and smaller updates to parameters with larger historical gradients.</li>
 </ul>
+
+I selected adam optimizer between above optimizers because of it's popularity and generally being most efficient optimizer that combine momentum and rmsprob optimizers.
+
+```
+optimizer = AdamW(model.parameters(), lr=0.0001)
+
+```
+
+### Loss Funtion
+
+As loss function i have used Binary Cross Entropy loss function. BCE a model metric that tracks incorrect labeling of the data class by a model, penalizing the model if deviations in probability occur into classifying the labels. It updates the parameters by propagating back to the network according to this loss value.
+
+```
+criterion = torch.nn.BCEWithLogitsLoss()
+
+```
+### Semantic Segmentation Model Selection
+### Unet
+When it comes to sementic segmentation tasks <b>U-NET</b> is one of the most popular model to achieve segmentation task. It's using convolutional neural networks to extract important features and updates image dimensions. Semantic segmentation, also known as pixel-based classification, is an important task in which we classify each pixel of an image as belonging to a particular class. U-net is a encoder-decoder type network architecture for image segmentation. U-net has proven to be very powerful segmentation tool in scenarios with limited data (less than 50 training samples in some cases). The ability of U-net to work with very little data and no specific requirement on input image size make it a strong candidate for image segmentation tasks.
+
+![1_f7YOaE4TWubwaFF7Z1fzNw](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/6281f882-05c9-4c50-a9f2-a8622b70d899)
+
+Unet consists of several part.
+<ul>
+ <li>
+  Contracting Path:. It consists of convolutional layers, max-pooling layers, and sometimes batch normalization and activation functions like ReLU. This part of the network captures context and features from the input image.
+
+ </li>
+ <li>
+  Bottleneck:At the bottom of the U shape is the bottleneck. This is typically a series of convolutional layers without pooling, aiming to capture detailed features and spatial information from the input.
+
+ </li>
+ <li>
+  Expanding Path:The bottom part of the U shape is called the expanding path. It involves upsampling the features using techniques like transposed convolutions or bilinear interpolation. This part of the network aims to recover the spatial information lost during downsampling and provides high-resolution feature maps.
+ </li>
+ <li>
+  Skip Connections:One of the key features of the U-Net architecture is the use of skip connections. During the expanding path, feature maps from the contracting path are concatenated with the upsampled feature maps. These skip connections help retain fine-grained details from the input image, which can improve the segmentation accuracy.
+ </li>
+ <li>
+  Output Layer:The final layer of the network is a convolutional layer that produces the segmentation map. Depending on the task, it might use different activation functions and output channels.
+
+ </li>
+</ul>
+
+### Pooling
+
+Pooling is used to downsapling operations in forward propagation. . These layers play a crucial role in reducing the spatial dimensions of the feature maps while retaining essential information. We've used max pooling in our model.
+
+```
+self.pool=nn.MaxPool2d(kernel_size=2,stride=2)
+```
+
+![8](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/b1a8dae4-7c83-4140-80ed-94167ac1cab9)
+
+### Activation Function
+When i look for a activation function after batch normalization layers, i found that ReLu activation function is very popular. With activation function we are introducing the property of non-linearity to a deep learning model and solving the vanishing gradients issue. The negative values default to zero, and the maximum for the positive number is taken into consideration. 
+
+![image-10](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/c73ad4a2-b4de-4518-9b7c-0dcbb309d51a)
+
+### Segformer
+
+ SegFormer, a simple, efficient yet powerful semantic segmentation framework which unifies Transformers with lightweight multilayer perception (MLP) decoders. SegFormer has two appealing features: 1) SegFormer comprises a novel hierarchically structured Transformer encoder which outputs multiscale features. It does not need positional encoding, thereby avoiding the interpolation of positional codes which leads to decreased performance when the testing resolution differs from training. 2) SegFormer avoids complex decoders. The proposed MLP decoder aggregates information from different layers, and thus combining both local attention and global attention to render powerful representations. We show that this simple and lightweight design is the key to efficient segmentation on Transformers.
+ 
+![segformer_architecture](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/88d5f9c7-03d1-4c76-bd4b-680a6c12caa3)
+
+### Evaluation
+
+Due to hardware constraints i used pretrained segformer model. Which is "nvidia/segformer-b0-finetuned-ade-512-512". This model pretrained before and gained good results. I retrained this model using Ford Otosan Highway data and afterall i got Train Pixel-wise accuracy: 0.9971257076378707         Train Loss: 0.007176180044638768         Val Pixel-wise accuracy: 0.9968600440612136         Val Loss: 0.007829783585266302 these accuracy values. As you can see our validation and training accuracies are close each other which means it seems there is no overfitting or underfitting which is great!
+
+
+### Inference
+
+At the end of the training and evaluation operations lets we do some predictions. 
+![indir](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/f1db5366-c6fd-4cc2-a917-1dfa6cbf25d0)
+
+
