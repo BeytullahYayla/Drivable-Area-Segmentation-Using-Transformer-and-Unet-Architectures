@@ -379,12 +379,49 @@ The logic of method is as follows:<br>
 In this part we will train our model with our images and corresponding masks which we created by the help of json2mask script.
 ### Train-Validation-Test Split
 Splitting data is crucial part of any data science related projects. We split our data into three group. Training, Validation and Test data.<br> <br>
-Training Data:<b>Training data</b> is used for train our model to learn specific patterns and adjusts it's parameters to understand the relationships between input data and corresponding outputs. The important topic about the training data is it shouldn't be used for evaluating model's performance.
-<br>
-Validation Data:During model training we use the <b>validation data</b> to asses it's performance and fine-tune hyperparameters. By evaluating our model on the validation data at every end of epoch we can prevent overfitting and gauge generalization problems.
-<br>
-Test Data:The test data is used to evaluate your model's performance in a real-world scenario. This data should not have been used during training or validation. A model's good performance on test data demonstrates its ability to generalize beyond the seen examples.
-When i do quick search from the internet i found that generally 80:10:10 or 70:20:10 rate for bigger datasets (Training,Validation, Test) is used to train and evaluate machine learning models. When we look at the dataset we have, it consists of 4660 image which is not very small. So i decided to use 70:20:10 rate for evaluate my model's performance better.
+<ul>
+<li><b>Training Data:</b>Training data is used for train our model to learn specific patterns and adjusts it's parameters to understand the relationships between input data and corresponding outputs. The important topic about the training data is it shouldn't be used for evaluating model's performance.</li>
+ <li><b>Validation Data:/b>During model training we use the <b>validation data</b> to asses it's performance and fine-tune hyperparameters. By evaluating our model on the validation data at every end of epoch we can prevent overfitting and gauge generalization problems.</li>
+ <li><b>Test Data:</b>The test data is used to evaluate your model's performance in a real-world scenario. This data should not have been used during training or validation. A model's good performance on test data demonstrates its ability to generalize beyond the seen examples.</li>
+</ul>
+
+
+
+When i do quick search from the internet i found that generally 80:10:10 or 70:20:10 rate for bigger datasets (Training,Validation, Test) is used to train and evaluate machine learning models. When we look at the dataset we have, it consists of 4660 image which is not very small. So i decided to use 70:20:10 rate for evaluate my model's performance better. Here is the code that provides to split our training, validation and test data.
+```
+indices = np.random.permutation(len(image_path_list))
+
+# DEFINE TEST AND VALID INDICES
+test_ind  = int(len(indices) * TEST_SIZE)
+valid_ind = int(test_ind + len(indices) * VALID_SIZE)
+
+# SLICE TEST DATASET FROM THE WHOLE DATASET
+test_input_path_list = image_path_list[:test_ind]
+test_label_path_list = mask_path_list[:test_ind]
+
+# SLICE VALID DATASET FROM THE WHOLE DATASET
+valid_input_path_list = image_path_list[test_ind:valid_ind]
+valid_label_path_list = mask_path_list[test_ind:valid_ind]
+
+# SLICE TRAIN DATASET FROM THE WHOLE DATASET
+train_input_path_list = image_path_list[valid_ind:]
+train_label_path_list = mask_path_list[valid_ind:]
+
+# DEFINE STEPS PER EPOCH
+steps_per_epoch = len(train_input_path_list)//BATCH_SIZE
+print(len(train_input_path_list))
+```
+Here is the constants to be used in training loop.
+```
+VALID_SIZE = 0.2
+TEST_SIZE  = 0.1
+BATCH_SIZE = 4
+EPOCHS = 5
+CUDA = True
+INPUT_SHAPE = (224, 224)
+N_CLASSES = 2
+
+```
 
 
 
