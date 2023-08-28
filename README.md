@@ -522,8 +522,73 @@ When i look for a activation function after batch normalization layers, i found 
 
 ### Evaluation
 
-Due to hardware constraints i used pretrained segformer model. Which is "nvidia/segformer-b0-finetuned-ade-512-512". This model pretrained before and gained good results. I retrained this model using Ford Otosan Highway data and afterall i got Train Pixel-wise accuracy: 0.9971257076378707         Train Loss: 0.007176180044638768         Val Pixel-wise accuracy: 0.9968600440612136         Val Loss: 0.007829783585266302 these accuracy values. As you can see our validation and training accuracies are close each other which means it seems there is no overfitting or underfitting which is great!
+### Pixel-wise Accuracy
+Pixel-wise accuracy is a metric used to evaluate the performance of image segmentation models, which assign a class label to each pixel in an image. It measures the percentage of correctly classified pixels in the predicted segmentation mask compared to the ground truth mask.
 
+<i><b>Pixel-wise Accuracy</b>= (Total Number of Pixels/Number of Correctly Classified Pixels)*100</i>
+
+Due to hardware constraints i used pretrained segformer model. Which is "nvidia/segformer-b0-finetuned-ade-512-512". This model pretrained before and gained good results. I retrained this model 5 epochs using Ford Otosan Highway data and afterall i got Train Pixel-wise accuracy: 0.9971257076378707         Train Loss: 0.007176180044638768         Val Pixel-wise accuracy: 0.9968600440612136         Val Loss: 0.007829783585266302 these accuracy values. As you can see our validation and training accuracies are close each other which means it seems there is no overfitting or underfitting which is great!
+​
+### IOU(Intersection Over Unit)
+
+The Intersection over Union (IOU) score, also known as the Jaccard index, is a widely used evaluation metric in computer vision tasks, particularly in object detection and segmentation. It measures the overlap between two sets, typically used to assess the quality of predicted bounding boxes or segmentation masks compared to ground truth annotations.
+
+In the context of segmentation tasks, the IOU score quantifies how well the predicted segmentation mask aligns with the ground truth mask. The formula for calculating the IOU score is:
+
+<i>IOU=(Area of intersection)/(Area Of Union)</i>
+
+```
+def calculate_iou(ground_truth_mask,predicted_mask):
+    
+    intersection = np.logical_and(ground_truth_mask, predicted_mask)
+
+    union = np.logical_or(ground_truth_mask, predicted_mask)
+    iou_score = np.sum(intersection) / np.sum(union)
+    return iou_score
+    
+    
+```
+
+After i created to this method, i calculated iou values of 100 test images and keep their scores in empty list. Then, i calculated a mean iou score to evaluate our model much better.
+
+```
+iou_scores=[]
+for i in tqdm.tqdm(range(0, 100)):
+    rand_idx=random.randint(0,len(X_test)-1)
+    feature_extractor_inference = SegformerFeatureExtractor(do_random_crop=False, do_pad=False)
+    image=plt.imread(X_test[i])
+    mask=plt.imread(y_test[i])
+    pixel_values = feature_extractor_inference(image, return_tensors="pt").pixel_values.to(device)
+    model.eval()
+    outputs = model(pixel_values=pixel_values)# logits are of shape (batch_size, num_labels, height/4, width/4)
+    logits = outputs.logits.cpu()
+    # First, rescale logits to original image size
+    upsampled_logits = nn.functional.interpolate(logits,
+                size=image.shape[:-1], # (height, width)
+                mode='bilinear',
+                align_corners=False)
+
+# Second, apply argmax on the class dimension
+    seg = upsampled_logits.argmax(dim=1)[0]
+    color_seg = np.zeros((seg.shape[0], seg.shape[1], 3), dtype=np.uint8) # height, width, 3\
+    for label, color in enumerate(RGB):
+        color_seg[seg == label, :] = RGB[label]
+# Convert to BGR
+    color_seg = color_seg[..., ::-1]
+
+# Show image + mask
+    img = np.array(image)
+    overlay_img = img.copy()
+    mask_alpha = 0.4
+    img[color_seg[:,:,1]==255,:]=(255,0,255)
+    iou_score=calculate_iou(mask,color_seg[:,:,1])
+    iou_scores.append(iou_score)
+    
+
+
+mean_iou_score=sum(iou_scores)/100
+```
+The result that we get after this operations is 0.9894445434355832. 
 
 ### Inference
 
