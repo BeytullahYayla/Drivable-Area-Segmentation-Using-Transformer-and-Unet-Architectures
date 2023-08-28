@@ -11,6 +11,16 @@
       *   [one_hot_encoder](#one_hot_encoder-method)
       *   [tensorize_image](#tensorize_image-method)
       *   [tensorize_mask](#tensorize_mask-method)
+ - [Training](#training)
+      *   [Splitting Data](#splitting_data)
+      *   [Optimizer](#optimizer)
+      *   [Loss Function](#loss-function)
+      *   [Segmentation Model Selection](#segmentation-model-selection)
+      *   [Training Loop](#training_loop)
+  - [Evaluation](#evaluation)
+  - [Inference](#inference)
+    
+  
 
  
 # 🗃 Project Structure
@@ -365,7 +375,161 @@ The logic of method is as follows:<br>
 
 </ol>
 
+## Training
+In this part we will train our model with our images and corresponding masks which we created by the help of json2mask script.
+### Train-Validation-Test Split
+Splitting data is crucial part of any data science related projects. We split our data into three group. Training, Validation and Test data.<br> <br>
+<ul>
+<li><b>Training Data:</b>Training data is used for train our model to learn specific patterns and adjusts it's parameters to understand the relationships between input data and corresponding outputs. The important topic about the training data is it shouldn't be used for evaluating model's performance.</li>
+ <li><b>Validation Data:/b>During model training we use the <b>validation data</b> to asses it's performance and fine-tune hyperparameters. By evaluating our model on the validation data at every end of epoch we can prevent overfitting and gauge generalization problems.</li>
+ <li><b>Test Data:</b>The test data is used to evaluate your model's performance in a real-world scenario. This data should not have been used during training or validation. A model's good performance on test data demonstrates its ability to generalize beyond the seen examples.</li>
+</ul>
 
+
+
+When i do quick search from the internet i found that generally 80:10:10 or 70:20:10 rate for bigger datasets (Training,Validation, Test) is used to train and evaluate machine learning models. When we look at the dataset we have, it consists of 4660 image which is not very small. So i decided to use 70:20:10 rate for evaluate my model's performance better. Here is the code that provides to split our training, validation and test data.
+```
+indices = np.random.permutation(len(image_path_list))
+
+# DEFINE TEST AND VALID INDICES
+test_ind  = int(len(indices) * TEST_SIZE)
+valid_ind = int(test_ind + len(indices) * VALID_SIZE)
+
+# SLICE TEST DATASET FROM THE WHOLE DATASET
+test_input_path_list = image_path_list[:test_ind]
+test_label_path_list = mask_path_list[:test_ind]
+
+# SLICE VALID DATASET FROM THE WHOLE DATASET
+valid_input_path_list = image_path_list[test_ind:valid_ind]
+valid_label_path_list = mask_path_list[test_ind:valid_ind]
+
+# SLICE TRAIN DATASET FROM THE WHOLE DATASET
+train_input_path_list = image_path_list[valid_ind:]
+train_label_path_list = mask_path_list[valid_ind:]
+
+# DEFINE STEPS PER EPOCH
+steps_per_epoch = len(train_input_path_list)//BATCH_SIZE
+print(len(train_input_path_list))
+```
+Here is the constants to be used in training loop.
+```
+VALID_SIZE = 0.2
+TEST_SIZE  = 0.1
+BATCH_SIZE = 4
+EPOCHS = 5
+CUDA = True
+INPUT_SHAPE = (224, 224)
+N_CLASSES = 2
+
+```
+
+### Optimizer
+
+In the context of machine learning and neural networks, refers to an algorithm or method used to adjust the parameters of a model in order to minimize the error or loss function. The goal of optimization is to find the optimal set of parameters that allow the model to best fit the training data and make accurate predictions on new, unseen data. Here are the examples of optimizer:
+
+<ul>
+ <li>
+  Stochastic Gradient Descent:This is a basic optimization algorithm that updates the parameters in the opposite direction of the gradient of the loss function. It uses a small random subset (mini-batch) of the training data for each iteration to compute the gradient.
+ </li>
+ <li>
+  Adam(Adaptive Moment Estimation):Adam combines the ideas of momentum and adaptive learning rates. It maintains exponential moving averages of past gradients and squared gradients to adjust the learning rate for each parameter individually. This helps the optimizer to adapt to different features and learning rates. Adam is  a popular algorithm because it achieves good results fast. Some of the hyperparameters of adam optimizer as follows:
+  <ul>
+   <li>
+    alpha: Also referred to as the learning rate or step size. The proportion that weights are updated (e.g. 0.001). Larger values (e.g. 0.3) results in faster initial learning before the rate is updated. Smaller values (e.g. 1.0E-5) slow learning right down during training
+   </li>
+   <li>beta1: The exponential decay rate for the first moment estimates (e.g. 0.9).</li>
+   <li>beta2: The exponential decay rate for the second-moment estimates (e.g. 0.999). This value should be set close to 1.0 on problems with a sparse gradient (e.g. NLP and computer vision problems).</li>
+   <li>epsilon: Is a very small number to prevent any division by zero in the implementation (e.g. 10E-8).</li>
+  </ul>
+Compared to other optimizer algorithms in mnist dataset results as follows. 
+  
+![adam](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/9269b01b-96ca-4110-bdea-19361d0b874a)
+
+As we can see adam optimizer way better than other algorithms in terms of training cost.
+
+
+
+ </li>
+ <li>
+  RMSProp: Similar to Adam, RMSprop also adapts the learning rate for each parameter. It divides the gradient by a moving average of the squared gradient, which helps in normalizing the gradient updates.
+ </li>
+ <li>Adagrad(Adaptive Gradient Algorithm):Adagrad (Adaptive Gradient Algorithm): Adagrad adapts the learning rate of each parameter based on the historical gradient information. It allocates larger updates to parameters with smaller historical gradients and smaller updates to parameters with larger historical gradients.</li>
+</ul>
+
+I selected adam optimizer between above optimizers because of it's popularity and generally being most efficient optimizer that combine momentum and rmsprob optimizers.
+
+```
+optimizer = AdamW(model.parameters(), lr=0.0001)
+
+```
+
+### Loss Funtion
+
+As loss function i have used Binary Cross Entropy loss function. BCE a model metric that tracks incorrect labeling of the data class by a model, penalizing the model if deviations in probability occur into classifying the labels. It updates the parameters by propagating back to the network according to this loss value.
+
+```
+criterion = torch.nn.BCEWithLogitsLoss()
+
+```
+### Semantic Segmentation Model Selection
+### Unet
+When it comes to sementic segmentation tasks <b>U-NET</b> is one of the most popular model to achieve segmentation task. It's using convolutional neural networks to extract important features and updates image dimensions. Semantic segmentation, also known as pixel-based classification, is an important task in which we classify each pixel of an image as belonging to a particular class. U-net is a encoder-decoder type network architecture for image segmentation. U-net has proven to be very powerful segmentation tool in scenarios with limited data (less than 50 training samples in some cases). The ability of U-net to work with very little data and no specific requirement on input image size make it a strong candidate for image segmentation tasks.
+
+![1_f7YOaE4TWubwaFF7Z1fzNw](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/6281f882-05c9-4c50-a9f2-a8622b70d899)
+
+Unet consists of several part.
+<ul>
+ <li>
+  Contracting Path:. It consists of convolutional layers, max-pooling layers, and sometimes batch normalization and activation functions like ReLU. This part of the network captures context and features from the input image.
+
+ </li>
+ <li>
+  Bottleneck:At the bottom of the U shape is the bottleneck. This is typically a series of convolutional layers without pooling, aiming to capture detailed features and spatial information from the input.
+
+ </li>
+ <li>
+  Expanding Path:The bottom part of the U shape is called the expanding path. It involves upsampling the features using techniques like transposed convolutions or bilinear interpolation. This part of the network aims to recover the spatial information lost during downsampling and provides high-resolution feature maps.
+ </li>
+ <li>
+  Skip Connections:One of the key features of the U-Net architecture is the use of skip connections. During the expanding path, feature maps from the contracting path are concatenated with the upsampled feature maps. These skip connections help retain fine-grained details from the input image, which can improve the segmentation accuracy.
+ </li>
+ <li>
+  Output Layer:The final layer of the network is a convolutional layer that produces the segmentation map. Depending on the task, it might use different activation functions and output channels.
+
+ </li>
+</ul>
+
+### Pooling
+
+Pooling is used to downsapling operations in forward propagation. . These layers play a crucial role in reducing the spatial dimensions of the feature maps while retaining essential information. We've used max pooling in our model.
+
+```
+self.pool=nn.MaxPool2d(kernel_size=2,stride=2)
+```
+
+![8](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/b1a8dae4-7c83-4140-80ed-94167ac1cab9)
+
+### Activation Function
+When i look for a activation function after batch normalization layers, i found that ReLu activation function is very popular. With activation function we are introducing the property of non-linearity to a deep learning model and solving the vanishing gradients issue. The negative values default to zero, and the maximum for the positive number is taken into consideration. 
+
+![image-10](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/c73ad4a2-b4de-4518-9b7c-0dcbb309d51a)
+
+### Segformer
+
+ SegFormer, a simple, efficient yet powerful semantic segmentation framework which unifies Transformers with lightweight multilayer perception (MLP) decoders. SegFormer has two appealing features: 1) SegFormer comprises a novel hierarchically structured Transformer encoder which outputs multiscale features. It does not need positional encoding, thereby avoiding the interpolation of positional codes which leads to decreased performance when the testing resolution differs from training. 2) SegFormer avoids complex decoders. The proposed MLP decoder aggregates information from different layers, and thus combining both local attention and global attention to render powerful representations. We show that this simple and lightweight design is the key to efficient segmentation on Transformers.
+ 
+![segformer_architecture](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/88d5f9c7-03d1-4c76-bd4b-680a6c12caa3)
+
+### Evaluation
+
+Due to hardware constraints i used pretrained segformer model. Which is "nvidia/segformer-b0-finetuned-ade-512-512". This model pretrained before and gained good results. I retrained this model using Ford Otosan Highway data and afterall i got Train Pixel-wise accuracy: 0.9971257076378707         Train Loss: 0.007176180044638768         Val Pixel-wise accuracy: 0.9968600440612136         Val Loss: 0.007829783585266302 these accuracy values. As you can see our validation and training accuracies are close each other which means it seems there is no overfitting or underfitting which is great!
+
+
+### Inference
+
+At the end of the training and evaluation operations lets we do some predictions. 
+
+![ford_predictions](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/87e4676f-aee9-4128-bd81-90eb573c1ccd)
 
 
 
