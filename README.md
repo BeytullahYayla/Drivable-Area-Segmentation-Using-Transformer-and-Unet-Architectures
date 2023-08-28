@@ -471,7 +471,7 @@ As loss function i have used Binary Cross Entropy loss function. BCE a model met
 criterion = torch.nn.BCEWithLogitsLoss()
 
 ```
-### Semantic Segmentation Model Selection
+### Segmentation Model Selection
 ### Unet
 When it comes to sementic segmentation tasks <b>U-NET</b> is one of the most popular model to achieve segmentation task. It's using convolutional neural networks to extract important features and updates image dimensions. Semantic segmentation, also known as pixel-based classification, is an important task in which we classify each pixel of an image as belonging to a particular class. U-net is a encoder-decoder type network architecture for image segmentation. U-net has proven to be very powerful segmentation tool in scenarios with limited data (less than 50 training samples in some cases). The ability of U-net to work with very little data and no specific requirement on input image size make it a strong candidate for image segmentation tasks.
 
@@ -519,6 +519,55 @@ When i look for a activation function after batch normalization layers, i found 
  SegFormer, a simple, efficient yet powerful semantic segmentation framework which unifies Transformers with lightweight multilayer perception (MLP) decoders. SegFormer has two appealing features: 1) SegFormer comprises a novel hierarchically structured Transformer encoder which outputs multiscale features. It does not need positional encoding, thereby avoiding the interpolation of positional codes which leads to decreased performance when the testing resolution differs from training. 2) SegFormer avoids complex decoders. The proposed MLP decoder aggregates information from different layers, and thus combining both local attention and global attention to render powerful representations. We show that this simple and lightweight design is the key to efficient segmentation on Transformers.
  
 ![segformer_architecture](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/88d5f9c7-03d1-4c76-bd4b-680a6c12caa3)
+
+### Training Loop
+
+```
+from tqdm import tqdm
+train_loss_history = []
+val_loss_history = []
+if CUDA:
+    model = model.cuda()
+
+# TRAINING THE NEURAL NETWORK
+for epoch in range(EPOCHS):
+    running_loss = 0
+    for ind in tqdm(range(steps_per_epoch), desc=f"Epoch {epoch+1}/{EPOCHS}"):
+        batch_input_path_list = train_input_path_list[BATCH_SIZE*ind:BATCH_SIZE*(ind+1)]
+        batch_label_path_list = train_label_path_list[BATCH_SIZE*ind:BATCH_SIZE*(ind+1)]
+        batch_input = preprocess.tensorize_image(batch_input_path_list, INPUT_SHAPE,CUDA)
+        batch_label = preprocess.tensorize_mask(batch_label_path_list, INPUT_SHAPE, N_CLASSES, CUDA)
+        optimizer.zero_grad()
+
+        outputs = model.forward(batch_input)
+       
+        loss = criterion(outputs, batch_label)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+        train_loss_history.append(running_loss / steps_per_epoch)
+     
+        if ind == steps_per_epoch-1:
+            print('training loss on epoch {}: {}'.format(epoch, running_loss))
+            
+            val_loss = 0
+            for (valid_input_path, valid_label_path) in zip(valid_input_path_list, valid_label_path_list):
+                list_image=[]
+                list_mask=[]
+                list_image.append(valid_input_path)
+                list_mask.append(valid_label_path)
+                batch_input = preprocess.tensorize_image(list_image, INPUT_SHAPE, CUDA)
+                batch_label = preprocess.tensorize_mask(list_mask, INPUT_SHAPE, N_CLASSES, CUDA)
+                outputs = model.forward(batch_input)
+                loss = criterion(outputs, batch_label)
+                val_loss += loss
+                break
+            val_loss_history.append(val_loss / len(valid_input_path_list))
+
+            print('validation loss on epoch {}: {}'.format(epoch, val_loss))
+
+```
 
 ### Evaluation
 
