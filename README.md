@@ -16,7 +16,7 @@
       *   [Optimizer](#optimizer)
       *   [Loss Function](#loss-function)
       *   [Segmentation Model Selection](#segmentation-model-selection)
-      *   [Training Loop](#training_loop)
+      *   [Training Loop](#training-loop)
   - [Evaluation](#evaluation)
   - [Inference](#inference)
     
