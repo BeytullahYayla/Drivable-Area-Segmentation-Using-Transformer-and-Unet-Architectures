@@ -16,7 +16,7 @@
       *   [Optimizer](#optimizer)
       *   [Loss Function](#loss-function)
       *   [Segmentation Model Selection](#segmentation-model-selection)
-      *   [Training Loop](#training_loop)
+      *   [Training Loop](#training-loop)
   - [Evaluation](#evaluation)
   - [Inference](#inference)
     
@@ -471,7 +471,7 @@ As loss function i have used Binary Cross Entropy loss function. BCE a model met
 criterion = torch.nn.BCEWithLogitsLoss()
 
 ```
-### Semantic Segmentation Model Selection
+### Segmentation Model Selection
 ### Unet
 When it comes to sementic segmentation tasks <b>U-NET</b> is one of the most popular model to achieve segmentation task. It's using convolutional neural networks to extract important features and updates image dimensions. Semantic segmentation, also known as pixel-based classification, is an important task in which we classify each pixel of an image as belonging to a particular class. U-net is a encoder-decoder type network architecture for image segmentation. U-net has proven to be very powerful segmentation tool in scenarios with limited data (less than 50 training samples in some cases). The ability of U-net to work with very little data and no specific requirement on input image size make it a strong candidate for image segmentation tasks.
 
@@ -520,16 +520,147 @@ When i look for a activation function after batch normalization layers, i found 
  
 ![segformer_architecture](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/88d5f9c7-03d1-4c76-bd4b-680a6c12caa3)
 
+### Training Loop
+
+```
+from tqdm import tqdm
+train_loss_history = []
+val_loss_history = []
+if CUDA:
+    model = model.cuda()
+
+# TRAINING THE NEURAL NETWORK
+for epoch in range(EPOCHS):
+    running_loss = 0
+    for ind in tqdm(range(steps_per_epoch), desc=f"Epoch {epoch+1}/{EPOCHS}"):
+        batch_input_path_list = train_input_path_list[BATCH_SIZE*ind:BATCH_SIZE*(ind+1)]
+        batch_label_path_list = train_label_path_list[BATCH_SIZE*ind:BATCH_SIZE*(ind+1)]
+        batch_input = preprocess.tensorize_image(batch_input_path_list, INPUT_SHAPE,CUDA)
+        batch_label = preprocess.tensorize_mask(batch_label_path_list, INPUT_SHAPE, N_CLASSES, CUDA)
+        optimizer.zero_grad()
+
+        outputs = model.forward(batch_input)
+       
+        loss = criterion(outputs, batch_label)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+        train_loss_history.append(running_loss / steps_per_epoch)
+     
+        if ind == steps_per_epoch-1:
+            print('training loss on epoch {}: {}'.format(epoch, running_loss))
+            
+            val_loss = 0
+            for (valid_input_path, valid_label_path) in zip(valid_input_path_list, valid_label_path_list):
+                list_image=[]
+                list_mask=[]
+                list_image.append(valid_input_path)
+                list_mask.append(valid_label_path)
+                batch_input = preprocess.tensorize_image(list_image, INPUT_SHAPE, CUDA)
+                batch_label = preprocess.tensorize_mask(list_mask, INPUT_SHAPE, N_CLASSES, CUDA)
+                outputs = model.forward(batch_input)
+                loss = criterion(outputs, batch_label)
+                val_loss += loss
+                break
+            val_loss_history.append(val_loss / len(valid_input_path_list))
+
+            print('validation loss on epoch {}: {}'.format(epoch, val_loss))
+
+```
+
 ### Evaluation
 
-Due to hardware constraints i used pretrained segformer model. Which is "nvidia/segformer-b0-finetuned-ade-512-512". This model pretrained before and gained good results. I retrained this model using Ford Otosan Highway data and afterall i got Train Pixel-wise accuracy: 0.9971257076378707         Train Loss: 0.007176180044638768         Val Pixel-wise accuracy: 0.9968600440612136         Val Loss: 0.007829783585266302 these accuracy values. As you can see our validation and training accuracies are close each other which means it seems there is no overfitting or underfitting which is great!
+### Pixel-wise Accuracy
+Pixel-wise accuracy is a metric used to evaluate the performance of image segmentation models, which assign a class label to each pixel in an image. It measures the percentage of correctly classified pixels in the predicted segmentation mask compared to the ground truth mask.
 
+<i><b>Pixel-wise Accuracy</b>= (Total Number of Pixels/Number of Correctly Classified Pixels)*100</i>
+
+Due to hardware constraints i used pretrained segformer model. Which is "nvidia/segformer-b0-finetuned-ade-512-512". This model pretrained before and gained good results. I retrained this model 5 epochs using Ford Otosan Highway data and afterall i got Train Pixel-wise accuracy: 0.9971257076378707         Train Loss: 0.007176180044638768         Val Pixel-wise accuracy: 0.9968600440612136         Val Loss: 0.007829783585266302 these accuracy values. As you can see our validation and training accuracies are close each other which means it seems there is no overfitting or underfitting which is great!
+​
+### IOU(Intersection Over Unit)
+
+The Intersection over Union (IOU) score, also known as the Jaccard index, is a widely used evaluation metric in computer vision tasks, particularly in object detection and segmentation. It measures the overlap between two sets, typically used to assess the quality of predicted bounding boxes or segmentation masks compared to ground truth annotations.
+
+In the context of segmentation tasks, the IOU score quantifies how well the predicted segmentation mask aligns with the ground truth mask. The formula for calculating the IOU score is:
+
+<i>IOU=(Area of intersection)/(Area Of Union)</i>
+
+```
+def calculate_iou(ground_truth_mask,predicted_mask):
+    
+    intersection = np.logical_and(ground_truth_mask, predicted_mask)
+
+    union = np.logical_or(ground_truth_mask, predicted_mask)
+    iou_score = np.sum(intersection) / np.sum(union)
+    return iou_score
+    
+    
+```
+
+After i created to this method, i calculated iou values of 100 test images and keep their scores in empty list. Then, i calculated a mean iou score to evaluate our model much better.
+
+```
+iou_scores=[]
+for i in tqdm.tqdm(range(0, 100)):
+    rand_idx=random.randint(0,len(X_test)-1)
+    feature_extractor_inference = SegformerFeatureExtractor(do_random_crop=False, do_pad=False)
+    image=plt.imread(X_test[i])
+    mask=plt.imread(y_test[i])
+    pixel_values = feature_extractor_inference(image, return_tensors="pt").pixel_values.to(device)
+    model.eval()
+    outputs = model(pixel_values=pixel_values)# logits are of shape (batch_size, num_labels, height/4, width/4)
+    logits = outputs.logits.cpu()
+    # First, rescale logits to original image size
+    upsampled_logits = nn.functional.interpolate(logits,
+                size=image.shape[:-1], # (height, width)
+                mode='bilinear',
+                align_corners=False)
+
+# Second, apply argmax on the class dimension
+    seg = upsampled_logits.argmax(dim=1)[0]
+    color_seg = np.zeros((seg.shape[0], seg.shape[1], 3), dtype=np.uint8) # height, width, 3\
+    for label, color in enumerate(RGB):
+        color_seg[seg == label, :] = RGB[label]
+# Convert to BGR
+    color_seg = color_seg[..., ::-1]
+
+# Show image + mask
+    img = np.array(image)
+    overlay_img = img.copy()
+    mask_alpha = 0.4
+    img[color_seg[:,:,1]==255,:]=(255,0,255)
+    iou_score=calculate_iou(mask,color_seg[:,:,1])
+    iou_scores.append(iou_score)
+    
+
+
+mean_iou_score=sum(iou_scores)/100
+```
+The result that we get after this operations is 0.9894445434355832. 
 
 ### Inference
 
 At the end of the training and evaluation operations lets we do some predictions. 
 
 ![ford_predictions](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/87e4676f-aee9-4128-bd81-90eb573c1ccd)
+
+![indir (7)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/07f4c8ac-d3ce-4ff0-8a49-18d6552ff11e)
+![indir (6)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/3c09caeb-56d8-44d7-99f0-e31f06674785)
+![indir (5)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e2c1282e-5959-43a8-89d0-12d1d319c978)
+![indir (4)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/5d932aec-5670-4aa8-8558-6b44780d290b)
+![indir (3)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/73cb3f12-ef07-42c2-9e25-c0287554403c)
+![indir (2)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/b8f4fb7a-09d7-4a39-9fa8-61754a9413c9)
+![indir (1)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/c6fb2317-39b0-466a-bc89-b46cc207cf2f)
+![indir](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/25357d9d-902b-422e-89f7-37d6e95ce295)
+![indir (14)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/daccdbae-ea8c-4ad1-a0af-66e94af4289f)
+![indir (13)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/f86bd2f5-0e5d-4334-b2ca-07f8039fafea)
+![indir (12)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e00ba31b-ef02-42c3-912d-90788a50479a)
+![indir (11)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/20b5da3c-23f6-4d92-8cd2-aca221bd12eb)
+![indir (10)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/62e4bde8-80ff-4293-805c-dc697c008b90)
+![indir (9)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/c9234192-fd9d-49ed-ae21-1b761eac8703)
+![indir (8)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/316523a9-4b5b-4d15-9726-0319f0cf73ff)
+
 
 
 
