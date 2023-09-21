@@ -105,9 +105,8 @@ def tensorize_mask(mask_path_list, output_shape, n_class, cuda=False):
     # For each masks
     for mask_path in mask_path_list:
        
-        # Access and read mask
+        # Access and read maskr
         mask = cv2.imread(mask_path, 0)
-
         # Resize the image according to defined shape
         mask = cv2.resize(mask, output_shape)
 
@@ -220,8 +219,9 @@ def one_hot_encoder(data, n_class):
         print("It should be same with the layer dimension, in this case it is 2")
         return
     if len(np.unique(data)) != n_class:
-        print("The number of unique values ​​in 'data' must be equal to the n_class")
-        return
+         print(f"Number of unique values in 'data': {np.unique(data)}")
+         print("The number of unique values ​​in 'data' must be equal to the n_class")
+         return
 
     # Define array whose dimensison is (width, height, number_of_class)
     encoded_data = np.zeros((*data.shape, n_class), dtype=np.int)
@@ -230,11 +230,14 @@ def one_hot_encoder(data, n_class):
     if n_class==2:
         encoded_labels = [[0,1], [1,0]]
     if n_class==3:
-        encoded_labels=encoded_labels = [
-        [1, 0, 0],  # No line
-        [0, 1, 0],  # Solid Line
-        [0, 0, 1],  # Dashed Line
-    ]
+   
+
+            encoded_labels=encoded_labels = [
+            [1, 0, 0],  # No line
+            [0, 1, 0],  # Solid Line
+            [0, 0, 1],  # Dashed Line
+            ]
+   
 
     
 
