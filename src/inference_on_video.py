@@ -4,6 +4,15 @@ import torch
 from constant import *
 from transformers import SegformerFeatureExtractor, SegformerForSemanticSegmentation
 
+BACKGROUND=(0,0,0)
+FREESPACE=(255,255,255)
+RGB={
+    
+    0:BACKGROUND,
+    1:FREESPACE
+    
+    
+}
 def get_predicted_images(model,image):
    
     feature_extractor_inference = SegformerFeatureExtractor(do_random_crop=False, do_pad=False)
@@ -27,8 +36,10 @@ def get_predicted_images(model,image):
 
     # Show image + mask
     img = np.array(image)
+    img_cpy=img.copy()
     img[color_seg[:,:,1]==255,:]=(255,0,0)
-    return img
+    opac_image=(img/2+img_cpy/2).astype(np.float64)
+    return opac_image
   
         
 
