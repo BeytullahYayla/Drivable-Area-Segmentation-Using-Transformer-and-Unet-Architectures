@@ -643,7 +643,8 @@ The result that we get after this operations is 0.9894445434355832.
 
 At the end of the training and evaluation operations lets we do some predictions. 
 
-![ford_predictions](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/87e4676f-aee9-4128-bd81-90eb573c1ccd)
+![indir](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/df85ac18-d58e-4555-a018-c39f6b60cb7d)
+
 
 ![indir (7)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/07f4c8ac-d3ce-4ff0-8a49-18d6552ff11e)
 ![indir (6)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/3c09caeb-56d8-44d7-99f0-e31f06674785)
