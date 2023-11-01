@@ -647,13 +647,14 @@ At the end of the training and evaluation operations lets we do some predictions
 
 
 
+![pred_tunnel2](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/95e1efe6-7ab6-46bd-8a50-df27f6de06b7)
+![pred_tunnel](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/3cb18ba6-d05e-4498-84fa-b40bc7227e78)
+![indir (4)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/55705170-792d-4c2b-a53d-e745870bdd3f)
+![indir (3)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e95f528c-ffba-497d-9575-55ff640af1a4)
+![pred1](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/3ea3f660-8012-4f7d-94b5-5b0bda2fa50b)
+![pred2](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/0e61f0be-6da3-48d2-ae87-4a8fd9b86ed4)
 
-![indir (3)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/a1c8c7af-08f7-47c2-8424-55b00291935f)
-![pred1](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/f2b4a408-6a94-41d0-8856-afb02f916ef0)
-![pred2](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e04c688c-e854-4723-9890-ff56f1e8a025)
-![indir (4)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/9a07042d-d9aa-49af-a4f1-c3c59acf3a2a)
-![pred_tunnel2](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/d85ce911-d048-469d-8fb4-0432dfd53c75)
-![pred_tunnel](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/5a820e0c-0e62-4b8d-8f2d-894bdc16d86f)
+
 
 
 
