@@ -142,9 +142,9 @@ for json_name in tqdm.tqdm(json_list):
 
 From top to bottom we basically get the name eof every json file in json_list and we join with Json directory to open and access provided json files. Then, we convert json file to json dict using json library. To draw mask first we need to know about size of images. We get this information from json dictionary and creating empty canvas to annotate corresponding pixels as freespace. After that we check all objects part of json dictionary if it is freespace then we can draw it. Lastly we save mask that we created using <b>cv2.imwrite</b> method.
 
+![indir (7)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/5be3c76c-acf7-4774-b61a-85d3675a6a7e)
+![indir (8)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/36e83e45-e1ee-4844-a056-15490e876428)
 
-![Json2Mask](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/664a03e3-254c-49f9-acb9-5cda517f6340)
-![Json2MaskLine](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e40e3008-0bd5-4b39-9404-4fcde68e24ba)
 
 
 ## Mask on Image
@@ -174,7 +174,8 @@ for mask_name in tqdm.tqdm(mask_list):
 ```
 First, in every mask in mask_list we obtain mask_name and for every mask name we remove it's extensions and create mask_path, image_path, image_out_path which corresponds where to save result images. After that we read mask as grayscale format and images. Then change the color of pixels on the original image that corresponds to the mask part and create new image. Finally we write output image into <b>IMAGE_OUT_DIR</b> folder.
 
-![image](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/fe876bac-78bb-4e74-81b6-6e346df6e04d)
+![indir (9)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/0afa0c97-53d3-4e3b-b559-a46e831b824d)
+
 
 ## Preprocessing
 In image classification and segmentation task we generally use preprocessing techniques. Preprocessing techniques refer to a set of data preparation steps that are applied to raw data before it can be used for analysis or modeling. Preprocessing aims to clean, organize and transform data so that it becomes suitable for further processing. In our project we have preprocess script. This script provides us to tensorize, resize and encode input data to give segmentation model properly. I'm gonna introduce you to methods one by one.
@@ -443,7 +444,8 @@ In the context of machine learning and neural networks, refers to an algorithm o
   </ul>
 Compared to other optimizer algorithms in mnist dataset results as follows. 
   
-![adam](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/9269b01b-96ca-4110-bdea-19361d0b874a)
+
+![performance](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/b486988a-a327-4003-b40a-de71cdae320b)
 
 As we can see adam optimizer way better than other algorithms in terms of training cost.
 
@@ -475,7 +477,8 @@ criterion = torch.nn.BCEWithLogitsLoss()
 ### Unet
 When it comes to sementic segmentation tasks <b>U-NET</b> is one of the most popular model to achieve segmentation task. It's using convolutional neural networks to extract important features and updates image dimensions. Semantic segmentation, also known as pixel-based classification, is an important task in which we classify each pixel of an image as belonging to a particular class. U-net is a encoder-decoder type network architecture for image segmentation. U-net has proven to be very powerful segmentation tool in scenarios with limited data (less than 50 training samples in some cases). The ability of U-net to work with very little data and no specific requirement on input image size make it a strong candidate for image segmentation tasks.
 
-![1_f7YOaE4TWubwaFF7Z1fzNw](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/6281f882-05c9-4c50-a9f2-a8622b70d899)
+
+![unet-architectures](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/ea663e36-1ce9-4e85-9977-009ea1a26dac)
 
 Unet consists of several part.
 <ul>
@@ -507,18 +510,22 @@ Pooling is used to downsapling operations in forward propagation. . These layers
 self.pool=nn.MaxPool2d(kernel_size=2,stride=2)
 ```
 
-![8](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/b1a8dae4-7c83-4140-80ed-94167ac1cab9)
+![maxpool](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e51c14b1-36a0-42c6-9778-67a883c4d81b)
+
 
 ### Activation Function
 When i look for a activation function after batch normalization layers, i found that ReLu activation function is very popular. With activation function we are introducing the property of non-linearity to a deep learning model and solving the vanishing gradients issue. The negative values default to zero, and the maximum for the positive number is taken into consideration. 
 
-![image-10](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/c73ad4a2-b4de-4518-9b7c-0dcbb309d51a)
+![relu_plot](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/6f373584-edb5-4165-a82e-fef3117fff78)
+
 
 ### Segformer
 
  SegFormer, a simple, efficient yet powerful semantic segmentation framework which unifies Transformers with lightweight multilayer perception (MLP) decoders. SegFormer has two appealing features: 1) SegFormer comprises a novel hierarchically structured Transformer encoder which outputs multiscale features. It does not need positional encoding, thereby avoiding the interpolation of positional codes which leads to decreased performance when the testing resolution differs from training. 2) SegFormer avoids complex decoders. The proposed MLP decoder aggregates information from different layers, and thus combining both local attention and global attention to render powerful representations. We show that this simple and lightweight design is the key to efficient segmentation on Transformers.
  
-![segformer_architecture](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/88d5f9c7-03d1-4c76-bd4b-680a6c12caa3)
+ ![Segformer-architecture](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/213b3db8-84e0-439f-b529-cb081b6df900)
+
+
 
 ### Training Loop
 
