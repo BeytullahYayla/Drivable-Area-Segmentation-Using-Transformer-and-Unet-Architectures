@@ -643,10 +643,17 @@ The result that we get after this operations is 0.9894445434355832.
 
 At the end of the training and evaluation operations lets we do some predictions. 
 
-![indir](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/df85ac18-d58e-4555-a018-c39f6b60cb7d)
 
 
 
+
+
+![indir (3)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/a1c8c7af-08f7-47c2-8424-55b00291935f)
+![pred1](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/f2b4a408-6a94-41d0-8856-afb02f916ef0)
+![pred2](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/e04c688c-e854-4723-9890-ff56f1e8a025)
+![indir (4)](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/9a07042d-d9aa-49af-a4f1-c3c59acf3a2a)
+![pred_tunnel2](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/d85ce911-d048-469d-8fb4-0432dfd53c75)
+![pred_tunnel](https://github.com/BeytullahYayla/FordOtosan-L4Highway-Internship-Project/assets/78471151/5a820e0c-0e62-4b8d-8f2d-894bdc16d86f)
 
 
 
